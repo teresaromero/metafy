@@ -5,10 +5,14 @@
   "main": "index.js",
   "author": "Teresa Romero",
   "license": "MIT",
+  "engines": {
+    "node": "14.15.4"
+  },
   "scripts": {
-    "start:prod": "node dist/index.js",
+    "start": "node dist/index.js",
+    "postinstall": "tsc",
     "start:dev": "nodemon",
-    "build:prod": "NODE_ENV=production rm -rf ./dist & tsc",
+    "build": "rm -rf ./dist & tsc",
     "lint": "eslint . --ext .ts,.js --quiet --fix"
   },
   "dependencies": {
