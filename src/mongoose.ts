@@ -1,5 +1,5 @@
 import mongoose, { Connection } from "mongoose"
-import { MONGO_URI } from "./config"
+import config from "./config"
 
 export const db: Connection = mongoose.connection
 
@@ -16,7 +16,7 @@ db.on("error", (err) => {
 
 export const connectDB = async (): Promise<void> => {
     await mongoose.connect(
-        MONGO_URI,
+        config.MONGO_URI,
         { useNewUrlParser: true, useUnifiedTopology: true }
     )
 }

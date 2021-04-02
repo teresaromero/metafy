@@ -1,25 +1,27 @@
-import dotenv from 'dotenv'
-import { PORT } from './config'
+import path from 'path'
+
+import config from './config'
 import { db, connectDB } from "./mongoose"
-import session from "express-session"
-import MongoDBStore from 'connect-mongodb-session'
-import { setRoutes, setupServer } from './server'
-const MongoStore = MongoDBStore(session);
+import { setRoutes, setupServer, enableAuth } from './server'
 
 
 (async () => {
-
-  dotenv.config()
 
   if (db.readyState !== 1) {
     await connectDB()
   }
 
   const server = setupServer()
+
+  server.set('views', path.join(__dirname, 'views'))
+  server.set('view engine', 'ejs')
+
+  enableAuth(server)
+
   setRoutes(server)
 
-  server.listen(PORT, () => {
-    console.log(`server started at ${PORT}`)
+  server.listen(config.PORT, () => {
+    console.log(`server started at ${config.PORT}`)
   })
 })()
 
