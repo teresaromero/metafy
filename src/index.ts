@@ -1,23 +1,31 @@
-import express from 'express'
 import dotenv from 'dotenv'
-import path from 'path'
 import { PORT } from './config'
-import rootRouter from './router/rootRouter'
-import callbackRouter from './router/callbackRouter'
+import { db, connectDB } from "./mongoose"
+import session from "express-session"
+import MongoDBStore from 'connect-mongodb-session'
+import { setRoutes, setupServer } from './server'
+const MongoStore = MongoDBStore(session);
 
-dotenv.config()
 
-const app = express()
+(async () => {
 
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+  dotenv.config()
 
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'ejs')
+  if (db.readyState !== 1) {
+    await connectDB()
+  }
 
-app.use('/', rootRouter)
-app.use('/auth', callbackRouter)
+  const server = setupServer()
+  setRoutes(server)
 
-app.listen(PORT, () => {
-  console.log(`server started at ${PORT}`)
-})
+  server.listen(PORT, () => {
+    console.log(`server started at ${PORT}`)
+  })
+})()
+
+
+
+
+
+
+
