@@ -3,6 +3,7 @@ import path from 'path'
 import config from './config'
 import { db, connectDB } from './mongoose'
 import { setRoutes, setupServer, enableAuth } from './server'
+import { logger, httpLogger, httpErrorLogger } from './winston'
 ;(async () => {
   if (db.readyState !== 1) {
     await connectDB()
@@ -15,9 +16,13 @@ import { setRoutes, setupServer, enableAuth } from './server'
 
   enableAuth(server)
 
+  server.use(httpLogger)
+
   setRoutes(server)
 
+  server.use(httpErrorLogger)
+
   server.listen(config.PORT, () => {
-    console.log(`server started at ${config.PORT}`)
+    logger.info(`server started at ${config.PORT}`, { label: 'server' })
   })
 })()
