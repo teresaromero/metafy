@@ -1,6 +1,7 @@
 import { PassportStatic } from 'passport'
 import { Strategy as SpotifyStategy, VerifyFunction } from 'passport-spotify'
 import config from '../../config'
+import { SpotifyApi } from '../../libs/spotify'
 import { User } from '../../models/User'
 import { logger } from '../../winston'
 
@@ -16,6 +17,9 @@ const verifyFunction: VerifyFunction = async (
       { providerId: profile.id },
       { accessToken, refreshToken, expires_in, provider: 'spotify' }
     )
+
+    SpotifyApi.setAuthorization(accessToken)
+
     return done(null, user.toExpressUser())
   } catch (error) {
     done(error)

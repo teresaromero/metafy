@@ -6,7 +6,7 @@ export default {
   NODE_ENV: process.env.NODE_ENV || 'development',
   PORT: process.env.PORT || 8080,
   JWTSECRET: process.env.JWTSECRET || 'supersecret',
-  SP_API_BASEURL: 'https://api.spotify.com',
+  SP_API_BASEURL: 'https://api.spotify.com/v1',
   ACCOUNT_AUTH: 'https://accounts.spotify.com/authorize',
   ACCOUNT_TOKEN: 'https://accounts.spotify.com/api/token',
   CALLBACK_URL:
