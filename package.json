@@ -13,7 +13,8 @@
     "start:dev": "nodemon",
     "build": "rm -rf ./dist && tsc && yarn copyViews",
     "copyViews": "cp -R src/views dist",
-    "lint": "eslint . --ext .ts,.js --quiet --fix"
+    "lint": "eslint . --ext .ts,.js --quiet --fix",
+    "prepare": "husky install"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -48,6 +49,7 @@
     "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
     "ts-node": "^9.1.1",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.3",
+    "husky": "^6.0.0"
   }
 }

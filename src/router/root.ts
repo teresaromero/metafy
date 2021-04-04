@@ -11,5 +11,4 @@ rootRouter.get('/home', loggedIn('/'), (req: Request, res: Response) => {
   res.send('home')
 })
 
-
 export { rootRouter }
