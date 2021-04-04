@@ -2,7 +2,7 @@ import path from 'path'
 
 import config from './config'
 import { db, connectDB } from './mongoose'
-import { setRoutes, setupServer, enableAuth } from './server'
+import { setRoutes, setupServer, enableAuth, traceRequestId } from './server'
 import { logger, httpLogger, httpErrorLogger } from './winston'
 ;(async () => {
   if (db.readyState !== 1) {
@@ -10,6 +10,8 @@ import { logger, httpLogger, httpErrorLogger } from './winston'
   }
 
   const server = setupServer()
+
+  traceRequestId(server)
 
   server.set('views', path.join(__dirname, 'views'))
   server.set('view engine', 'ejs')

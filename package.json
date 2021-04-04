@@ -29,6 +29,7 @@
     "passport": "^0.4.1",
     "passport-spotify": "^2.0.0",
     "ramda": "^0.27.1",
+    "uuid": "^8.3.2",
     "winston": "^3.3.3"
   },
   "devDependencies": {
@@ -41,6 +42,7 @@
     "@types/passport": "^1.0.6",
     "@types/passport-spotify": "^1.1.0",
     "@types/ramda": "^0.27.39",
+    "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
     "eslint": "^7.23.0",
