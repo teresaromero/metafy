@@ -1,4 +1,5 @@
-import express, { Application } from 'express'
+import express, { Application, NextFunction, Request, Response } from 'express'
+import { v4 as uuidv4 } from 'uuid'
 import passport from '../passport'
 import { authRouter, rootRouter } from '../router'
 import session from 'express-session'
@@ -34,4 +35,13 @@ export const enableAuth = (app: Application): void => {
   )
 
   passport(app)
+}
+
+export const traceRequestId = (app: Application): void => {
+  app.all('*', (req: Request, res: Response, next: NextFunction) => {
+    const requestId = uuidv4()
+    req['x-request-id'] = requestId
+    res.setHeader('x-request-id', requestId)
+    next()
+  })
 }

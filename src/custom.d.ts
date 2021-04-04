@@ -6,6 +6,10 @@ declare namespace Express {
     refreshToken?: string
     expires_in?: number
   }
+
+  export interface Request {
+    'x-request-id': string
+  }
 }
 
 declare module 'passport-spotify' {

@@ -2,6 +2,7 @@ import { PassportStatic } from 'passport'
 import { Strategy as SpotifyStategy, VerifyFunction } from 'passport-spotify'
 import config from '../../config'
 import { User } from '../../models/User'
+import { logger } from '../../winston'
 
 const verifyFunction: VerifyFunction = async (
   accessToken,
@@ -34,7 +35,6 @@ export default (passport: PassportStatic): void => {
       )
     )
   } catch (error) {
-    console.log('Passport Connexion ' + error.message)
-    process.exit(1)
+    logger.error('Passport Connexion ' + error.message)
   }
 }
