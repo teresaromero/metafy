@@ -9,12 +9,8 @@ const dynamicMeta = (req: Request): object => ({
   user: req.user?.id || undefined
 })
 
-const format = winston.format.printf(({ level, label, message, timestamp }) => {
-  return `${timestamp} [${label}] ${level}: ${message}`
-})
 
 export const logger = winston.createLogger({
-  format: winston.format.combine(winston.format.timestamp(), format),
   transports: [console]
 })
 
