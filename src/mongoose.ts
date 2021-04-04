@@ -17,6 +17,6 @@ db.on("error", (err) => {
 export const connectDB = async (): Promise<void> => {
     await mongoose.connect(
         config.MONGO_URI,
-        { useNewUrlParser: true, useUnifiedTopology: true }
+        { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
     )
 }

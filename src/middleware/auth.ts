@@ -1,14 +1,25 @@
 import { Response, Request, NextFunction } from "express"
 
-export const protectedRoute = (redirect: string) => (req: Request, res: Response, next: NextFunction): void => {
+export const loggedIn = (redirect: string) => (req: Request, res: Response, next: NextFunction): void => {
     if (!req.user) {
+        console.log('Error: you are not logged in!')
         res.redirect(redirect)
     } else {
         next()
     }
 }
 
-export const logout = (redirect: string = "/home") => (req: Request, res: Response): void => {
+export const notLoggedIn = (redirect: string) => (req: Request, res: Response, next: NextFunction): void => {
+    if (req.user) {
+        console.log('Error: you are logged in!')
+        res.redirect(redirect)
+    } else {
+        next()
+    }
+}
+
+export const logout = (redirect: string = "/") => (req: Request, res: Response): void => {
     req.logout()
+    console.log('Info: you are logout!')
     res.redirect(redirect)
 }

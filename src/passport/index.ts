@@ -1,6 +1,6 @@
 import { Application } from "express"
 import passport, { AuthenticateOptions } from "passport"
-import { IUser, User } from "../models/User";
+import { UserDocument, User } from "../models/User";
 import spotifyStrategy from "./strategies/spotify"
 
 export default (app: Application): void => {
@@ -11,9 +11,9 @@ export default (app: Application): void => {
 
     passport.deserializeUser(async (id, done) => {
         try {
-            const user: IUser | null = await User.findById(id)
+            const user: UserDocument | null = await User.findById(id)
             if (user) {
-                done(null, user.toJSON<IUser>())
+                done(null, user.toExpressUser())
             } else {
                 done(null)
             }
