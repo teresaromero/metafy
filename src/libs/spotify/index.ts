@@ -2,7 +2,8 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import {
   PrivateUserObject,
   PublicUserObject,
-  RegularErrorResponse
+  RegularErrorResponse,
+  SearchQuery
 } from './spotify'
 import config from '../../config'
 
@@ -71,6 +72,25 @@ export class SpotifyApi {
     try {
       const response: AxiosResponse<PrivateUserObject> = await SpotifyApi.getInstance().get(
         `/users/${user_id}`
+      )
+      return response.data
+    } catch (error) {
+      if (isAxiosError(error)) {
+        const data = error.response!.data
+        return data
+      } else {
+        return { error: { message: error.message, status: 500 } }
+      }
+    }
+  }
+
+  static async search(
+    query: SearchQuery
+  ): Promise<PublicUserObject | RegularErrorResponse> {
+    const { q, type, limit = 20, offset = 0 } = query
+    try {
+      const response: AxiosResponse<PrivateUserObject> = await SpotifyApi.getInstance().get(
+        `/search?query=${q}&type=${type}&limit=${limit}&offset=${offset}`
       )
       return response.data
     } catch (error) {

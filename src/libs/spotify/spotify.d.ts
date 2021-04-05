@@ -67,3 +67,14 @@ export interface RegularErrorResponse {
     message: string
   }
 }
+
+export interface SearchQuery {
+  q: string
+  type: string
+  market?: string
+  limit?: number
+  // default 20 - min 1 - max 50
+  offset?: number
+  // default 0 - max 1000
+  include_external?: ExternalType
+}
