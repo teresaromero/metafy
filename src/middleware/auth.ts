@@ -1,51 +1,54 @@
 import { Response, Request, NextFunction } from 'express'
 import { SpotifyApi } from '../libs/spotify'
-import { logger } from '../winston'
 
-export const loggedIn = (redirect: string) => (
+export function isAuth(
+  req: Request
+): req is Request & Express.AuthenticatedRequest {
+  return req.isAuthenticated()
+}
+
+function isNotAuth(
+  req: Request
+): req is Request & Express.UnauthenticatedRequest {
+  return req.isUnauthenticated()
+}
+
+export const loggedIn = () => (
   req: Request,
   res: Response,
   next: NextFunction
 ): void => {
-  if (req.isUnauthenticated()) {
-    logger.error('Error: you are not logged in!', {
-      'x-request-id': req['x-request-id']
-    })
-    res.redirect(redirect)
-  } else {
-    req.isAuthenticated()
+  if (isAuth(req)) {
+    SpotifyApi.setAuthorization(req.user)
     next()
+  } else {
+    res.status(403).send({ message: 'Forbbiden', status: 403 })
   }
 }
 
-export const notLoggedIn = (redirect: string) => (
+export const notLoggedIn = () => (
   req: Request,
   res: Response,
   next: NextFunction
 ): void => {
-  if (req.isAuthenticated()) {
-    logger.error('Error: you are already logged in!', {
-      'x-request-id': req['x-request-id'],
-      user: req.user.id
-    })
-    res.redirect(redirect)
-  } else {
-    req.isUnauthenticated()
+  if (isNotAuth(req)) {
     next()
+  } else {
+    res.status(409).send({ message: 'Conflict', status: 409 })
   }
 }
 
-export const logout = (redirect = '/') => (
+export const logout = () => (
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): void => {
-  logger.info('User logout', {
-    'x-request-id': req['x-request-id'],
-    user: req.user?.id
-  })
-  req.logout()
+  if (isAuth(req)) {
+    req.logout()
+    SpotifyApi.resetAuthorization()
 
-  SpotifyApi.setAuthorization('')
-
-  res.redirect(redirect)
+    next()
+  } else {
+    res.status(409).send({ message: 'Conflict', status: 409 })
+  }
 }

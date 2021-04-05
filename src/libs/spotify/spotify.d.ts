@@ -61,7 +61,7 @@ interface AuthErrorResponse {
   error_description: string
 }
 
-interface RegularErrorResponse {
+export interface RegularErrorResponse {
   error: {
     status: number
     message: string
