@@ -1,20 +1,11 @@
 import { Request, Response, Router } from 'express'
 import { SpotifyApi } from '../libs/spotify'
-import { RegularErrorResponse, SearchQuery } from '../libs/spotify/spotify'
+import {
+  isError,
+  isSearchQuery,
+  isNewReleasesQuery
+} from '../libs/spotify/utils'
 import { loggedIn } from '../middleware/auth'
-
-function isError(
-  data: RegularErrorResponse | unknown
-): data is RegularErrorResponse {
-  return (data as RegularErrorResponse).error !== undefined
-}
-
-function isSearchQuery(query: SearchQuery | unknown): query is SearchQuery {
-  return (
-    (query as SearchQuery).q !== undefined &&
-    (query as SearchQuery).type !== undefined
-  )
-}
 
 const rootRouter = Router()
 
@@ -65,5 +56,23 @@ rootRouter.get('/search', loggedIn(), async (req: Request, res: Response) => {
       .send({ status: 400, message: 'Missing query params q or type' })
   }
 })
+
+rootRouter.get(
+  '/new-releases',
+  loggedIn(),
+  async (req: Request, res: Response) => {
+    if (isNewReleasesQuery(req.query)) {
+      const data = await SpotifyApi.newReleases(req.query)
+
+      if (isError(data)) {
+        res.status(data.error.status).send(data.error)
+      } else {
+        res.send(data)
+      }
+    } else {
+      res.status(400).send({ status: 400, message: 'Wrong query params' })
+    }
+  }
+)
 
 export { rootRouter }

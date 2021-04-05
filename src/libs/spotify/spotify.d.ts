@@ -1,3 +1,171 @@
+export interface SearchResponse {
+  artists: PagingObject<ArtistObject>
+  album: PagingObject<SimplifiedAlbumObject>
+  track: PagingObject<TrackObject>
+  show: PagingObject<SimplifiedShowObject>
+  episode: PagingObject<SimplifiedEpisodeObject>
+}
+
+interface ResumePointObject {
+  fully_played: boolean
+  resume_position_ms: number
+}
+
+interface SimplifiedShowObject {
+  available_markets: string[]
+  copyrights: CopyrightObject[]
+  description: string
+  explicit: boolean
+  external_urls: ExternalUrlObject
+  href: string
+  id: string
+  images: ImageObject[]
+  is_externally_hosted: boolean
+  languages: string[]
+  media_type: string
+  name: string
+  publisher: string
+  type: 'show'
+  uri: string
+}
+
+interface SimplifiedEpisodeObject {
+  audio_preview_url: string
+  description: string
+  duration_ms: string
+  explicit: boolean
+  external_urls: ExternalUrlObject
+  href: string
+  id: string
+  images: ImageObject[]
+  is_externally_hosted: boolean
+  is_playable: boolean
+  language?: string
+  languages: string[]
+  name: string
+  realease_date: string
+  release_date_precision: 'year' | 'month' | 'day'
+  resume_point?: ResumePointObject
+  type: 'episode'
+  uri: string
+}
+
+interface RestrictionObject {
+  reason: 'market' | 'product' | 'explicit'
+}
+
+interface TrackObject {
+  album: SimplifiedAlbumObject
+  artists: ArtistObject[]
+  available_markets: string[]
+  disc_number: number
+  duration_ms: number
+  explicit: boolean
+  external_ids: ExternalIdObject
+  external_urls: ExternalUrlObject
+  href: string
+  id: string
+  is_local: boolean
+  is_playable: boolean
+  linked_from: LinkedTrackObject
+  name: string
+  popularity: number
+  preview_url: string
+  restrictions: RestrictionObject
+  track_number: number
+  type: 'track'
+  uri: string
+}
+
+interface PagingObject<T> {
+  href: string
+  items: T[]
+  limit: number
+  next: string | null
+  offset: number
+  previous: string | null
+  total: number
+}
+
+interface BaseObject {
+  genres: string[]
+  external_urls: ExternalUrlObject
+  popularity: number
+  uri: string
+  name: string
+  href: string
+  id: string
+  images: ImageObject[]
+}
+
+export interface SimplifiedArtistObject
+  extends Omit<BaseObject, 'images|genres|popularity'> {
+  type: 'artist'
+}
+
+export interface ArtistObject extends BaseObject {
+  followers: FollowersObject
+  type: 'artist'
+}
+
+export interface CopyrightObject {
+  text: string
+  type: 'C' | 'P'
+}
+
+export interface ExternalIdObject {
+  ean: string
+  isrc: string
+  upc: string
+}
+
+export interface SimplifiedAlbumObject
+  extends Omit<BaseObject, 'genres|popularity'> {
+  album_group: 'album' | 'single' | 'compilation' | 'appears_on'
+  album_type: 'album' | 'single' | 'compilation'
+  artists: ArtistObject[]
+  available_markets: string[]
+  release_date: string
+  release_date_precision: 'year' | 'month' | 'day'
+  restrictions: RestrictionObject
+  type: 'album'
+}
+
+export interface AlbumObject extends BaseObject {
+  album_type: 'album' | 'single' | 'compilation'
+  artists: ArtistObject[]
+  available_markets: string[]
+  copyrights: CopyrightObject[]
+  external_ids: ExternalIdObject
+  label: string
+  release_date: string
+  release_date_precision: 'year' | 'month' | 'day'
+  restrictions: RestrictionObject
+  tracks: SimplifiedTrackObject[]
+  type: 'album'
+}
+
+export interface LinkedTrackObject
+  extends Omit<BaseObject, 'images|genres|popularity|name'> {
+  type: 'track'
+}
+
+export interface SimplifiedTrackObject
+  extends Omit<BaseObject, 'images|genres|popularity'> {
+  artists: SimplifiedArtistObject[]
+  available_markets: string[]
+  disc_number: number
+  duration_ms: number
+  explicit: boolean
+  is_local: boolean
+  is_playable: boolean
+  linked_from: LinkedTrackObject
+  preview_url: string
+  restrictions: string
+  track_number: number
+  type: 'track'
+}
+
 export interface PublicUserObject {
   id: String
   //The Spotify user ID for the user.	String
@@ -77,4 +245,16 @@ export interface SearchQuery {
   offset?: number
   // default 0 - max 1000
   include_external?: ExternalType
+}
+
+export interface NewReleasesQuery {
+  country?: string
+  limit?: number
+  // default 20 - min 1 - max 50
+  offset?: number
+  // default 0 - max 1000
+}
+
+export interface NewReleasesResponse {
+  albums: PagingObject<AlbumObject>
 }
