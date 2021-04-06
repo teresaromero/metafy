@@ -49,11 +49,10 @@ UserSchema.statics.updateOrCreate = async function (
   query: UserQuery,
   updateFields: UserUpdateQuery
 ): Promise<UserDocument> {
-  const user = await this.findOneAndUpdate(query, updateFields, {
+  return this.findOneAndUpdate(query, updateFields, {
     new: true,
     upsert: true
-  })
-  return user
+  }).exec()
 }
 
 UserSchema.methods.toExpressUser = function (this: UserDocument): Express.User {

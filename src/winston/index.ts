@@ -9,7 +9,6 @@ const dynamicMeta = (req: Request): object => ({
   user: req.user?.id || undefined
 })
 
-
 export const logger = winston.createLogger({
   transports: [console]
 })
