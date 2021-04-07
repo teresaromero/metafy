@@ -13,9 +13,10 @@
     "start:dev": "nodemon",
     "build": "rm -rf ./dist && tsc && yarn copyViews",
     "copyViews": "cp -R src/views dist",
-    "lint": "eslint . --ext .ts,.js --quiet --fix",
+    "lint": "eslint . --ext .ts,.js",
+    "lint:fix": "eslint . --ext .ts,.js  --quiet --fix",
     "prepare": "husky install",
-    "test":"jest --no-coverage"
+    "test": "jest --no-coverage"
   },
   "dependencies": {
     "axios": "^0.21.1",
