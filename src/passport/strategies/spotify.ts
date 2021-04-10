@@ -12,9 +12,11 @@ const verifyFunction: VerifyFunction = async (
   done
 ) => {
   try {
-    const user = await User.updateOrCreate(
-      { providerId: profile.id },
-      { accessToken, refreshToken, expires_in, provider: 'spotify' }
+    const user = await User.logInWithSpotify(
+      profile.id,
+      accessToken,
+      refreshToken,
+      expires_in
     )
     return done(null, user.toExpressUser())
   } catch (error) {

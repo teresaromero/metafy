@@ -6,6 +6,7 @@ const config: Config.InitialOptions = {
   bail: true,
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.{ts}'],
-  testPathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/node_modules/']
+  testPathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/node_modules/'],
+  testEnvironment: 'node'
 }
 export default config

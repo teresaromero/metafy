@@ -1,67 +1,40 @@
-import { Model, model, Schema, Document } from 'mongoose'
-
-export interface UserDocument extends Document {
-  id: string
-  provider: string
-  providerId: string
-  username?: string
-  accessToken?: string
-  refreshToken?: string
-  expires_in?: number
-  toExpressUser(): Express.User
-}
-
-export interface UserModel extends Model<UserDocument> {
-  updateOrCreate(
-    query: UserQuery,
-    updateFields: UserUpdateQuery
-  ): Promise<UserDocument>
-}
-
-export interface UserQuery {
-  providerId?: string
-  username?: string
-}
-
-export interface UserUpdateQuery {
-  accessToken?: string
-  refreshToken?: string
-  expires_in?: number
-  provider: string
-}
+import { Model, model, Schema } from 'mongoose'
+import { UserModel, UserDocument } from './User.types'
 
 const UserSchema: Schema<UserDocument, Model<UserDocument>> = new Schema(
   {
     provider: { type: String, required: true, enum: ['spotify'] },
-    providerId: { type: String, required: true },
+    providerId: { type: String, required: true, unique: true },
     accessToken: { type: String, required: false },
     refreshToken: { type: String, required: false },
     expires_in: { type: Number, required: false }
   },
-  { toJSON: { virtuals: true }, timestamps: true }
+  { timestamps: true }
 )
 
-UserSchema.virtual('id').get(function (this: UserDocument) {
-  return this._id
-})
-
-UserSchema.statics.updateOrCreate = async function (
-  query: UserQuery,
-  updateFields: UserUpdateQuery
+UserSchema.statics.logInWithSpotify = async function (
+  providerId,
+  accessToken,
+  refreshToken,
+  expires_in
 ): Promise<UserDocument> {
-  return this.findOneAndUpdate(query, updateFields, {
-    new: true,
-    upsert: true
-  }).exec()
+  return this.findOneAndUpdate(
+    { providerId, provider: 'spotify' },
+    { accessToken, refreshToken, expires_in },
+    {
+      new: true,
+      upsert: true
+    }
+  ).exec()
 }
 
 UserSchema.methods.toExpressUser = function (this: UserDocument): Express.User {
   return {
-    id: this._id,
+    id: this.id,
+    provider: this.provider,
     providerId: this.providerId,
     accessToken: this.accessToken,
-    refreshToken: this.refreshToken,
-    expires_in: this.expires_in
+    refreshToken: this.refreshToken
   }
 }
 

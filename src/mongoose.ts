@@ -1,23 +1,35 @@
-import mongoose, { Connection } from 'mongoose'
+import mongoose, { Error } from 'mongoose'
 import config from './config'
 import { logger } from './winston'
 
-export const db: Connection = mongoose.connection
+export const dbConnection = mongoose.connection
 
-db.on('connecting', () => logger.info('MongoDB connecting...'))
-db.on('connected', () => logger.info('MongoDB connected'))
-db.on('disconnecting', () => logger.info('MongoDB disconnecting...'))
-db.on('disconnected', () => logger.info('MongoDB disconnected'))
-db.on('close', () => logger.info('MongoDB closed'))
-db.on('reconnected', () => logger.info('MongoDB reconnected'))
-db.on('error', (err) => {
-  logger.error(err.message)
+mongoose.connection.on('connecting', () => logger.info('MongoDB connecting...'))
+mongoose.connection.on('connected', () => logger.info('MongoDB connected'))
+mongoose.connection.on('disconnecting', () =>
+  logger.info('MongoDB disconnecting...')
+)
+mongoose.connection.on('disconnected', () =>
+  logger.info('MongoDB disconnected')
+)
+mongoose.connection.on('close', () => logger.info('MongoDB closed'))
+mongoose.connection.on('reconnectFailed', () =>
+  logger.warn('MongoDB reconnectFailed')
+)
+
+mongoose.connection.on('error', (error: Error) => {
+  logger.error(error.message)
 })
 
 export const connectDB = async (): Promise<void> => {
-  await mongoose.connect(config.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false
-  })
+  try {
+    await mongoose.connect(config.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false
+    })
+  } catch (error) {
+    logger.error(error.message)
+    process.exit(1)
+  }
 }
