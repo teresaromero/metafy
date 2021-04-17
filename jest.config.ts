@@ -5,8 +5,9 @@ const config: Config.InitialOptions = {
   verbose: true,
   bail: true,
   collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.{ts}'],
+  collectCoverageFrom: ['src/**'],
   testPathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/node_modules/'],
-  testEnvironment: 'node'
+  testEnvironment: 'node',
+  setupFilesAfterEnv: ['<rootDir>/jest/globalSetup.ts']
 }
 export default config

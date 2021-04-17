@@ -1,13 +1,8 @@
 import { User } from '../User'
 import { Error } from 'mongoose'
-import { connect, clearDatabase, closeDatabase } from '../../mongoose.mock'
 import { UserDocument } from '../User.types'
 
 describe('User', () => {
-  beforeAll(async () => await connect())
-  afterEach(async () => await clearDatabase())
-  afterAll(async () => await closeDatabase())
-
   it('Should throw Validation Error if required fields are not preset', async () => {
     try {
       await new User({}).save()

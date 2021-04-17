@@ -1,6 +1,6 @@
 import mongoose, { Error } from 'mongoose'
-import config from './config'
-import { logger } from './winston'
+import config from '.'
+import { logger } from '../winston'
 
 export const dbConnection = mongoose.connection
 
