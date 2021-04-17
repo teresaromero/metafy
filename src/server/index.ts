@@ -1,7 +1,7 @@
 import express, { Application, NextFunction, Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 import passport from '../passport'
-import { authRouter, rootRouter } from '../router'
+import { authRouter, rootRouter, profileRouter, searchRouter } from '../router'
 import session from 'express-session'
 import MongoDBStore from 'connect-mongodb-session'
 import config from '../config'
@@ -19,6 +19,8 @@ export const setupServer = (): Application => {
 export const setRoutes = (app: Application): void => {
   app.use('/', rootRouter)
   app.use('/auth', authRouter)
+  app.use('/profile', profileRouter)
+  app.use('/search', searchRouter)
 }
 
 export const enableAuth = (app: Application): void => {
