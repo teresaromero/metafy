@@ -1,13 +1,11 @@
 import path from 'path'
 
 import config from './config'
-import { db, connectDB } from './mongoose'
+import { connectDB } from './config/mongoose'
 import { setRoutes, setupServer, enableAuth, traceRequestId } from './server'
 import { logger, httpLogger, httpErrorLogger } from './winston'
 ;(async () => {
-  if (db.readyState !== 1) {
-    await connectDB()
-  }
+  await connectDB()
 
   const server = setupServer()
 
