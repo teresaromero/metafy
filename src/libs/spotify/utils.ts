@@ -1,21 +1,26 @@
 import { AxiosError } from 'axios'
 import R from 'ramda'
+import { HttpError, Result } from '../response'
 import { NewReleasesQuery, RegularErrorResponse, SearchQuery } from './spotify'
 
-function isAxiosError(
-  error: AxiosError<RegularErrorResponse> | Error
-): error is AxiosError<RegularErrorResponse> {
+export function isAxiosError<T>(
+  error: AxiosError<T> | Error
+): error is AxiosError<T> {
   return (error as AxiosError).isAxiosError
 }
 
-export function handleError(
+export function handleError<T>(
   error: AxiosError<RegularErrorResponse> | Error
-): RegularErrorResponse {
-  if (isAxiosError(error)) {
-    const data = error.response!.data
-    return data
+): Result<T> {
+  if (isAxiosError<RegularErrorResponse>(error) && error.response) {
+    return Result.error(
+      new HttpError(
+        error.response.data.error.status,
+        error.response.data.error.message
+      )
+    )
   } else {
-    return { error: { message: error.message, status: 500 } }
+    return Result.error(new HttpError(500, error.message))
   }
 }
 

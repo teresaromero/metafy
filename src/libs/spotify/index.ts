@@ -4,12 +4,12 @@ import {
   NewReleasesResponse,
   PrivateUserObject,
   PublicUserObject,
-  RegularErrorResponse,
   SearchQuery,
   SearchResponse
 } from './spotify'
 import config from '../../config'
 import { handleError } from './utils'
+import { Result } from '../response'
 
 // Note: If Web API returns status code 429, it means that you have sent too many requests.
 // When this happens, check the Retry-After header, where you will see a number displayed.
@@ -47,57 +47,39 @@ export class SpotifyApi {
     ] = undefined
   }
 
-  static async getCurrentUser(): Promise<
-    PrivateUserObject | RegularErrorResponse
-  > {
-    try {
-      const response: AxiosResponse<PrivateUserObject> = await SpotifyApi.getInstance().get(
-        '/me'
-      )
-      return response.data
-    } catch (error) {
-      return handleError(error)
-    }
+  static async getCurrentUser(): Promise<AxiosResponse<PrivateUserObject>> {
+    return SpotifyApi.getInstance().get('/me')
   }
 
   static async getUser(
     user_id: string
-  ): Promise<PublicUserObject | RegularErrorResponse> {
-    try {
-      const response: AxiosResponse<PrivateUserObject> = await SpotifyApi.getInstance().get(
-        `/users/${user_id}`
-      )
-      return response.data
-    } catch (error) {
-      return handleError(error)
-    }
+  ): Promise<AxiosResponse<PublicUserObject>> {
+    return SpotifyApi.getInstance().get(`/users/${user_id}`)
   }
 
-  static async search(
-    query: SearchQuery
-  ): Promise<SearchResponse | RegularErrorResponse> {
+  static async search(query: SearchQuery): Promise<Result<SearchResponse>> {
     const { q, type, limit = 20, offset = 0 } = query
     try {
       const response: AxiosResponse<SearchResponse> = await SpotifyApi.getInstance().get(
         `/search?query=${q}&type=${type}&limit=${limit}&offset=${offset}`
       )
-      return response.data
+      return Result.ok(response.data)
     } catch (error) {
-      return handleError(error)
+      return handleError<SearchResponse>(error)
     }
   }
 
   static async newReleases(
     query: NewReleasesQuery
-  ): Promise<NewReleasesResponse | RegularErrorResponse> {
+  ): Promise<Result<NewReleasesResponse>> {
     const { country = 'ES', limit = 20, offset = 0 } = query
     try {
       const response: AxiosResponse<NewReleasesResponse> = await SpotifyApi.getInstance().get(
         `/browse/new-releases?country=${country}&limit=${limit}&offset=${offset}`
       )
-      return response.data
+      return Result.ok(response.data)
     } catch (error) {
-      return handleError(error)
+      return handleError<NewReleasesResponse>(error)
     }
   }
 }

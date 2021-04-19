@@ -1,31 +1,22 @@
 import { Router, Request, Response } from 'express'
-import { SpotifyApi } from '../libs/spotify'
-import { isError } from '../libs/spotify/utils'
+import { getCurrentUserProfile, getUserProfile } from '../controllers/profile'
+import { PrivateUserObject, PublicUserObject } from '../libs/spotify/spotify'
+import { handleResponse } from '../middleware'
 import { loggedIn } from '../middleware/auth'
 
 const profileRouter = Router()
 
 profileRouter.get('/me', loggedIn(), async (_req: Request, res: Response) => {
-  const data = await SpotifyApi.getCurrentUser()
-
-  if (isError(data)) {
-    res.status(data.error.status).send(data.error)
-  } else {
-    res.send(data)
-  }
+  const result = await getCurrentUserProfile()
+  handleResponse<PrivateUserObject>(res, result)
 })
 
 profileRouter.get(
   '/users/:user_id',
   loggedIn(),
   async (req: Request, res: Response) => {
-    const data = await SpotifyApi.getUser(req.params.user_id)
-
-    if (isError(data)) {
-      res.status(data.error.status).send(data.error)
-    } else {
-      res.send(data)
-    }
+    const result = await getUserProfile(req.params.user_id)
+    handleResponse<PublicUserObject>(res, result)
   }
 )
 
