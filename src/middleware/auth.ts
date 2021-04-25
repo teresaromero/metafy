@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from 'express'
-import { SpotifyApi } from '../libs/spotify'
+import { AuthSpotifyApi } from '../libs/spotify'
 
 export function isAuth(
   req: Request
@@ -19,7 +19,7 @@ export const loggedIn = () => (
   next: NextFunction
 ): void => {
   if (isAuth(req)) {
-    SpotifyApi.setAuthorization(req.user)
+    AuthSpotifyApi.setAuthorization(req.user)
     next()
   } else {
     res.status(403).send({ message: 'Forbbiden', status: 403 })
@@ -45,7 +45,7 @@ export const logout = () => (
 ): void => {
   if (isAuth(req)) {
     req.logout()
-    SpotifyApi.resetAuthorization()
+    AuthSpotifyApi.resetAuthorization()
 
     next()
   } else {

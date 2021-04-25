@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { Result } from '../libs/response'
-import { SpotifyApi } from '../libs/spotify'
+import { SearchSpotifyApi } from '../libs/spotify'
 import {
   NewReleasesQuery,
   NewReleasesResponse,
@@ -16,7 +16,7 @@ export const getSearchQuery = () => async (
 ): Promise<void> => {
   try {
     const searchQuery = (req.query as unknown) as SearchQuery
-    const { data } = await SpotifyApi.search(searchQuery)
+    const { data } = await SearchSpotifyApi.search(searchQuery)
     const result = Result.ok(data)
     res.send(result.data)
   } catch (err) {
@@ -32,7 +32,7 @@ export const getNewReleasesForCountry = () => async (
 ): Promise<void> => {
   try {
     const searchQuery = (req.query as unknown) as NewReleasesQuery
-    const { data } = await SpotifyApi.newReleases(searchQuery)
+    const { data } = await SearchSpotifyApi.newReleases(searchQuery)
     const result = Result.ok(data)
     res.send(result.data)
   } catch (err) {

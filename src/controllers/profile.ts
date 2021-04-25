@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { Result } from '../libs/response'
-import { SpotifyApi } from '../libs/spotify'
+import { UsersSpotifyApi } from '../libs/spotify'
 import { PrivateUserObject, PublicUserObject } from '../libs/spotify/spotify'
 import { handleError } from '../libs/spotify/utils'
 
@@ -10,7 +10,7 @@ export const getCurrentUserProfile = () => async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { data } = await SpotifyApi.getCurrentUser()
+    const { data } = await UsersSpotifyApi.getCurrentUser()
     const result = Result.ok(data)
     res.send(result.data)
   } catch (err) {
@@ -25,7 +25,7 @@ export const getUserProfile = () => async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { data } = await SpotifyApi.getUser(req.params.user_id)
+    const { data } = await UsersSpotifyApi.getUser(req.params.user_id)
     const result = Result.ok(data)
     res.send(result.data)
   } catch (err) {
