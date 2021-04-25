@@ -5,6 +5,7 @@ import { authRouter, rootRouter, profileRouter, searchRouter } from '../router'
 import session from 'express-session'
 import MongoDBStore from 'connect-mongodb-session'
 import config from '../config'
+import { HttpError } from '../libs/response'
 const MongoStore = MongoDBStore(session)
 
 export const setupServer = (): Application => {
@@ -21,6 +22,12 @@ export const setRoutes = (app: Application): void => {
   app.use('/auth', authRouter)
   app.use('/profile', profileRouter)
   app.use('/search', searchRouter)
+  app.use(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
+      res.status(err.statusCode).send(err.toJSON)
+    }
+  )
 }
 
 export const enableAuth = (app: Application): void => {

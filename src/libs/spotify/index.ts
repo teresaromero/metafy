@@ -59,27 +59,24 @@ export class SpotifyApi {
 
   static async search(query: SearchQuery): Promise<Result<SearchResponse>> {
     const { q, type, limit = 20, offset = 0 } = query
-    try {
-      const response: AxiosResponse<SearchResponse> = await SpotifyApi.getInstance().get(
-        `/search?query=${q}&type=${type}&limit=${limit}&offset=${offset}`
-      )
-      return Result.ok(response.data)
-    } catch (error) {
-      return handleError<SearchResponse>(error)
-    }
+    const queryParam = q ? `query=${q}` : undefined
+    const typeParam = type ? `type=${type}` : undefined
+    const params = [queryParam, typeParam].filter(
+      (param) => param !== undefined
+    )
+
+    return SpotifyApi.getInstance().get(
+      `/search?${params.join('&')}&limit=${limit}&offset=${offset}`
+    )
   }
 
   static async newReleases(
     query: NewReleasesQuery
   ): Promise<Result<NewReleasesResponse>> {
-    const { country = 'ES', limit = 20, offset = 0 } = query
-    try {
-      const response: AxiosResponse<NewReleasesResponse> = await SpotifyApi.getInstance().get(
-        `/browse/new-releases?country=${country}&limit=${limit}&offset=${offset}`
-      )
-      return Result.ok(response.data)
-    } catch (error) {
-      return handleError<NewReleasesResponse>(error)
-    }
+    const { country, limit = 20, offset = 0 } = query
+    const countryQuery = country ? `country=${country}` : undefined
+    return SpotifyApi.getInstance().get(
+      `/browse/new-releases?${countryQuery}&limit=${limit}&offset=${offset}`
+    )
   }
 }
