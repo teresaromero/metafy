@@ -13,7 +13,7 @@ export default {
     process.env.CALLBACK_URL || 'http://localhost:8080/auth/spotify/callback',
   CLIENT_ID: process.env.SP_CLIENT_ID || 'client id from spotify',
   CLIENT_SECRET: process.env.SP_CLIENT_SECRET || 'client secret from spotify',
-  MONGO_URI: process.env.MONGO_URI || 'mongodb://localhost:27017/metafy',
+  MONGO_URI: process.env.MONGO_URI || 'mongodb://mongodb:27017/metafy',
   MONGO_SESSION_SECRET:
     process.env.MONGO_SESSION_SECRET || 'mongosessionsecret',
   MONGO_SESSION_NAME: process.env.MONGO_SESSION_NAME || 'sessions'

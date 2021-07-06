@@ -14,6 +14,6 @@ describe('config.ts', () => {
 
   it('Should get default values when no .env are present', () => {
     const configObj = config
-    expect(configObj.MONGO_URI).toBe('mongodb://localhost:27017/metafy')
+    expect(configObj.MONGO_URI).toBe('mongodb://mongodb:27017/metafy')
   })
 })

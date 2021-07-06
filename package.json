@@ -6,7 +6,7 @@
   "author": "Teresa Romero",
   "license": "MIT",
   "engines": {
-    "node": "14.15.4"
+    "node": ">= 14"
   },
   "scripts": {
     "start": "node dist/index.js",

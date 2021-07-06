@@ -1,0 +1,9 @@
+node_modules
+.husky
+.github
+.scannerwork
+.vscode
+coverage
+dist
+jest
+.DS_Store
