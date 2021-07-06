@@ -19,6 +19,7 @@
     "test": "jest --runInBand --no-coverage --no-deprecation"
   },
   "dependencies": {
+    "@kubernetes/client-node": "^0.15.0",
     "axios": "^0.21.1",
     "connect-mongodb-session": "^2.4.1",
     "dotenv": "^8.2.0",
