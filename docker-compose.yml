@@ -20,5 +20,6 @@ services:
       - SP_CLIENT_ID=${SP_CLIENT_ID}
       - SP_CLIENT_SECRET=${SP_CLIENT_SECRET}
       - CALLBACK_URL=${CALLBACK_URL}
+      - NAMESPACE=${NAMESPACE}
 volumes:
   data:

@@ -16,5 +16,6 @@ export default {
   MONGO_URI: process.env.MONGO_URI || 'mongodb://mongodb:27017/metafy',
   MONGO_SESSION_SECRET:
     process.env.MONGO_SESSION_SECRET || 'mongosessionsecret',
-  MONGO_SESSION_NAME: process.env.MONGO_SESSION_NAME || 'sessions'
+  MONGO_SESSION_NAME: process.env.MONGO_SESSION_NAME || 'sessions',
+  NAMESPACE: process.env.NAMESPACE || ''
 }

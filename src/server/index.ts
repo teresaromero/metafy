@@ -1,7 +1,13 @@
 import express, { Application, NextFunction, Request, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 import passport from '../passport'
-import { authRouter, rootRouter, profileRouter, searchRouter } from '../router'
+import {
+  authRouter,
+  rootRouter,
+  profileRouter,
+  searchRouter,
+  k8sRouter
+} from '../router'
 import session from 'express-session'
 import MongoDBStore from 'connect-mongodb-session'
 import config from '../config'
@@ -22,6 +28,7 @@ export const setRoutes = (app: Application): void => {
   app.use('/auth', authRouter)
   app.use('/profile', profileRouter)
   app.use('/search', searchRouter)
+  app.use('/k8s', k8sRouter)
   app.use(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
